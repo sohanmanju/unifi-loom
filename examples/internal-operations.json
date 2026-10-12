@@ -1,0 +1,8 @@
+[
+  {
+    "operation_id": "internalListTrafficRoutes",
+    "method": "GET",
+    "path": "/v2/api/site/{site}/trafficroutes",
+    "summary": "Example custom internal Network route; verify against your console before enabling"
+  }
+]

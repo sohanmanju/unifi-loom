@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "unifi-loom"
+version = "0.1.4"
+description = "UniFi Network MCP for AI-assisted VLAN, Wi-Fi, firewall and AP radio management with Mermaid topology diagrams"
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["unifi", "ubiquiti", "mcp", "network-automation", "vlan", "wifi", "firewall", "mermaid"]
+authors = [{ name = "UniFi Loom contributors" }]
+requires-python = ">=3.11"
+dependencies = ["mcp>=1.28,<2", "httpx>=0.28,<0.29", "jsonschema>=4.26,<5", "pydantic>=2.11,<3", "referencing>=0.37,<0.38"]
+
+[project.optional-dependencies]
+test = ["pytest>=9,<10", "pytest-asyncio>=1.4,<2"]
+
+[project.urls]
+Homepage = "https://github.com/sohanmanju/unifi-loom"
+Repository = "https://github.com/sohanmanju/unifi-loom"
+Issues = "https://github.com/sohanmanju/unifi-loom/issues"
+Documentation = "https://github.com/sohanmanju/unifi-loom#readme"
+
+[project.scripts]
+unifi-loom = "unifi_network_mcp.server:main"
+udm-network-mcp = "unifi_network_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/unifi_network_mcp"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"specs/network-10.6.106.json" = "unifi_network_mcp/specs/network-10.6.106.json"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

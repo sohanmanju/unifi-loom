@@ -1,0 +1,26 @@
+name: Bug report
+description: Report an MCP, API, or topology issue using sanitized details.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not paste credentials, .env files, MAC addresses, public IPs, real inventories, or certificates. Use private reporting for security vulnerabilities."
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: UniFi OS, Network, Python, UniFi Loom and MCP host versions.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps and expected behavior
+      description: Include the tool name and sanitized argument shape.
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Sanitized error
+      description: Remove deployment-specific identifiers and secrets.

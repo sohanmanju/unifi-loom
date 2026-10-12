@@ -1,0 +1,1090 @@
+{
+  "server": "UniFi Loom",
+  "tools": [
+    {
+      "name": "list_operations",
+      "description": "Discover Network API operation IDs and write/read status. No network calls.",
+      "inputSchema": {
+        "properties": {
+          "adapter": {
+            "default": "official",
+            "title": "Adapter",
+            "type": "string"
+          },
+          "search": {
+            "default": "",
+            "title": "Search",
+            "type": "string"
+          }
+        },
+        "title": "list_operationsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "describe_operation",
+      "description": "Return request parameters, body schema and referenced schemas for one operation.",
+      "inputSchema": {
+        "properties": {
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation_id"
+        ],
+        "title": "describe_operationArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "read_operation",
+      "description": "Execute a schema-validated GET. Paginated operations return one page; follow totalCount/offset.",
+      "inputSchema": {
+        "properties": {
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "path_params": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Path Params"
+          },
+          "query": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Query"
+          }
+        },
+        "required": [
+          "operation_id"
+        ],
+        "title": "read_operationArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "prepare_change",
+      "description": "Validate and preview a mutation without submitting it. Plan expires in ten minutes.",
+      "inputSchema": {
+        "properties": {
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "path_params": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Path Params"
+          },
+          "query": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Query"
+          },
+          "body": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Body"
+          }
+        },
+        "required": [
+          "operation_id",
+          "reason"
+        ],
+        "title": "prepare_changeArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "name": "apply_change",
+      "description": "Ask the human to approve the immutable preview, then submit once. Elicitation support required.",
+      "inputSchema": {
+        "properties": {
+          "plan_id": {
+            "title": "Plan Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "plan_id"
+        ],
+        "title": "apply_changeArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_ap_radios",
+      "description": "Inspect an AP's internal radio configuration. device_id is the legacy _id, not the official UUID.",
+      "inputSchema": {
+        "properties": {
+          "device_id": {
+            "title": "Device Id",
+            "type": "string"
+          },
+          "site": {
+            "default": "default",
+            "title": "Site",
+            "type": "string"
+          }
+        },
+        "required": [
+          "device_id"
+        ],
+        "title": "get_ap_radiosArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "prepare_ap_radio_change",
+      "description": "Preview channel, width, transmit power or minimum RSSI changes. Use apply_change for human approval.",
+      "inputSchema": {
+        "$defs": {
+          "RadioEdit": {
+            "additionalProperties": false,
+            "properties": {
+              "channel": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "const": "auto",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Channel"
+              },
+              "channel_width_mhz": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      20,
+                      40,
+                      80,
+                      160,
+                      320
+                    ],
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Channel Width Mhz"
+              },
+              "power_mode": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "auto",
+                      "low",
+                      "medium",
+                      "high",
+                      "custom"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Power Mode"
+              },
+              "transmit_power_dbm": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Transmit Power Dbm"
+              },
+              "min_rssi_enabled": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Min Rssi Enabled"
+              },
+              "min_rssi_dbm": {
+                "anyOf": [
+                  {
+                    "maximum": -1,
+                    "minimum": -100,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Min Rssi Dbm"
+              }
+            },
+            "title": "RadioEdit",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "device_id": {
+            "title": "Device Id",
+            "type": "string"
+          },
+          "radio_name": {
+            "title": "Radio Name",
+            "type": "string"
+          },
+          "settings": {
+            "$ref": "#/$defs/RadioEdit"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "site": {
+            "default": "default",
+            "title": "Site",
+            "type": "string"
+          }
+        },
+        "required": [
+          "device_id",
+          "radio_name",
+          "settings",
+          "reason"
+        ],
+        "title": "prepare_ap_radio_changeArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "name": "change_status",
+      "description": "Inspect a prepared plan or retained submission outcome without replaying it.",
+      "inputSchema": {
+        "properties": {
+          "plan_id": {
+            "title": "Plan Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "plan_id"
+        ],
+        "title": "change_statusArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "network_snapshot",
+      "description": "Collect all pages of Network devices/networks, plus optional clients. Official site_id is a UUID.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "default": "",
+            "title": "Site Id",
+            "type": "string"
+          },
+          "site": {
+            "default": "default",
+            "title": "Site",
+            "type": "string"
+          },
+          "source": {
+            "default": "official",
+            "title": "Source",
+            "type": "string"
+          },
+          "include_clients": {
+            "default": false,
+            "title": "Include Clients",
+            "type": "boolean"
+          }
+        },
+        "title": "network_snapshotArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "generate_diagram",
+      "description": "Generate Mermaid from live reported topology. Optional .mmd export to the configured state directory.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "default": "",
+            "title": "Site Id",
+            "type": "string"
+          },
+          "site": {
+            "default": "default",
+            "title": "Site",
+            "type": "string"
+          },
+          "source": {
+            "default": "official",
+            "title": "Source",
+            "type": "string"
+          },
+          "view": {
+            "default": "physical",
+            "title": "View",
+            "type": "string"
+          },
+          "include_clients": {
+            "default": false,
+            "title": "Include Clients",
+            "type": "boolean"
+          },
+          "save": {
+            "default": false,
+            "title": "Save",
+            "type": "boolean"
+          }
+        },
+        "title": "generate_diagramArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "name": "diagram_from_snapshot",
+      "description": "Generate Mermaid offline from a previously collected or supplied snapshot; makes no console requests.",
+      "inputSchema": {
+        "properties": {
+          "snapshot": {
+            "additionalProperties": true,
+            "title": "Snapshot",
+            "type": "object"
+          },
+          "view": {
+            "default": "physical",
+            "title": "View",
+            "type": "string"
+          },
+          "include_clients": {
+            "default": false,
+            "title": "Include Clients",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "snapshot"
+        ],
+        "title": "diagram_from_snapshotArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_application_info",
+      "description": "Read the actual UniFi Network application version. No site ID or discovery step required.",
+      "inputSchema": {
+        "properties": {},
+        "title": "get_application_infoArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_sites",
+      "description": "List sites and their official UUIDs. Call first when site_id is unknown. Returns one page; follow totalCount.",
+      "inputSchema": {
+        "properties": {
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "list_sitesArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_devices",
+      "description": "List adopted UniFi APs, switches and gateways with model, status and official device UUID. One page; optional documented UniFi filter.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_devicesArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_device_details",
+      "description": "Read one adopted device's interfaces, firmware and reported uplink. Uses official UUIDs, not legacy IDs.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "device_id": {
+            "title": "Device Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "site_id",
+          "device_id"
+        ],
+        "title": "get_device_detailsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_device_stats",
+      "description": "Read the latest adopted-device statistics for traffic and health inspection. Uses official UUIDs.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "device_id": {
+            "title": "Device Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "site_id",
+          "device_id"
+        ],
+        "title": "get_device_statsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_clients",
+      "description": "List currently connected clients with names, IPs and connection types. Uses site UUID; returns one page, not offline history.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_clientsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_client_details",
+      "description": "Read one connected client's reported identity and uplink. Uses official site/client UUIDs.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "client_id": {
+            "title": "Client Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "site_id",
+          "client_id"
+        ],
+        "title": "get_client_detailsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_client_inventory",
+      "description": "Read internal client inventory with hostnames, OUI/vendor and fingerprint IDs, useful for IoT identification. Opt-in internal adapter required. Legacy site name; include_offline selects known-client history. Numeric fingerprints alone do not establish a model.",
+      "inputSchema": {
+        "properties": {
+          "site": {
+            "default": "default",
+            "title": "Site",
+            "type": "string"
+          },
+          "include_offline": {
+            "default": false,
+            "title": "Include Offline",
+            "type": "boolean"
+          }
+        },
+        "title": "list_client_inventoryArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_networks",
+      "description": "List configured networks and VLAN IDs. For subnet/DHCP details use get_network_details. One page; site UUID required.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_networksArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_network_details",
+      "description": "Read one VLAN/network's full reported configuration including subnet, DHCP, isolation and zone where available. Uses official UUIDs.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "network_id": {
+            "title": "Network Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "site_id",
+          "network_id"
+        ],
+        "title": "get_network_detailsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_wifi_broadcasts",
+      "description": "List SSIDs/Wi-Fi broadcasts and reported network/broadcast scope. Credentials are redacted. One page; site UUID required.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_wifi_broadcastsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_firewall_zones",
+      "description": "List firewall zones used to group networks for security policies. One page; site UUID required.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_firewall_zonesArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_firewall_policies",
+      "description": "Inspect configured firewall policies, actions and source/destination matching. One page; no mutation.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_firewall_policiesArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_acl_rules",
+      "description": "List network access-control (ACL) rules for security inspection. One page; no mutation.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_acl_rulesArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_wan_interfaces",
+      "description": "Read WAN interface inventory/configuration exposed by the official API. This tool does not configure WAN links.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_wan_interfacesArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_vpn_servers",
+      "description": "Read configured VPN server inventory exposed by the official API. One page; configuration writes are not exposed here.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_vpn_serversArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_vpn_tunnels",
+      "description": "Read site-to-site VPN tunnel inventory. One page; this tool does not create or change a VPN.",
+      "inputSchema": {
+        "properties": {
+          "site_id": {
+            "title": "Site Id",
+            "type": "string"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 100,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "filter_expression": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Filter Expression"
+          }
+        },
+        "required": [
+          "site_id"
+        ],
+        "title": "list_vpn_tunnelsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    }
+  ]
+}

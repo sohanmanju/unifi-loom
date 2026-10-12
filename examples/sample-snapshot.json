@@ -1,0 +1,18 @@
+{
+  "source": "synthetic example, not your network",
+  "collected_at": null,
+  "devices": [
+    {"id": "udm", "name": "UDM Pro", "model": "UDM Pro", "ipAddress": "192.168.1.1"},
+    {"id": "switch", "name": "Office Switch", "model": "USW", "uplink": {"deviceId": "udm"}},
+    {"id": "ap", "name": "Office AP", "model": "U7", "macAddress": "aa:bb:cc:dd:ee:ff", "uplink": {"deviceId": "switch"}}
+  ],
+  "networks": [
+    {"id": "lan", "name": "Trusted", "vlanId": 1},
+    {"id": "iot", "name": "IoT", "vlanId": 20},
+    {"id": "guest", "name": "Guest", "vlanId": 30}
+  ],
+  "clients": [
+    {"id": "laptop", "name": "Laptop", "ap_mac": "aa:bb:cc:dd:ee:ff", "networkId": "lan"}
+  ],
+  "warnings": ["Synthetic example: these devices and VLANs are not discovered from your UDM."]
+}

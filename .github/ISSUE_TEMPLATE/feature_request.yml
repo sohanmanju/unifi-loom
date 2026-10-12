@@ -1,0 +1,16 @@
+name: Feature request
+description: Propose a Network workflow or a focused MCP tool.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: task
+    attributes:
+      label: Task to accomplish
+      description: Describe the job and what the existing tools are missing.
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: API evidence
+      description: Link official docs or provide sanitized internal route information. Do not include live payloads or credentials.

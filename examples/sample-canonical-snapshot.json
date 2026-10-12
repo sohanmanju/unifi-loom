@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "source": "synthetic example, not your network",
+  "site": "",
+  "collected_at": null,
+  "devices": [
+    {
+      "id": "udm",
+      "name": "UDM Pro",
+      "model": "UDM Pro",
+      "ip_address": "192.168.1.1",
+      "gateway": true,
+      "attachment": {
+        "parent_id": null,
+        "kind": "uplink",
+        "port": null
+      }
+    },
+    {
+      "id": "switch",
+      "name": "Office Switch",
+      "model": "USW",
+      "ip_address": null,
+      "gateway": false,
+      "attachment": {
+        "parent_id": "udm",
+        "kind": "uplink",
+        "port": null
+      }
+    },
+    {
+      "id": "ap",
+      "name": "Office AP",
+      "model": "U7",
+      "ip_address": null,
+      "gateway": false,
+      "attachment": {
+        "parent_id": "switch",
+        "kind": "uplink",
+        "port": null
+      }
+    }
+  ],
+  "clients": [
+    {
+      "id": "laptop",
+      "name": "Laptop",
+      "network_id": "lan",
+      "attachment": {
+        "parent_id": "ap",
+        "kind": "wireless",
+        "port": null
+      }
+    }
+  ],
+  "networks": [
+    {
+      "id": "lan",
+      "name": "Trusted",
+      "vlan": 1,
+      "subnet": null
+    },
+    {
+      "id": "iot",
+      "name": "IoT",
+      "vlan": 20,
+      "subnet": null
+    },
+    {
+      "id": "guest",
+      "name": "Guest",
+      "vlan": 30,
+      "subnet": null
+    }
+  ],
+  "warnings": [
+    "Synthetic example: these devices and VLANs are not discovered from your UDM."
+  ]
+}

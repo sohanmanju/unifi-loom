@@ -1,0 +1,8 @@
+flowchart TD
+  subgraph networks["Configured networks - grouping only"]
+    n094a367b026246fb["Trusted / VLAN 1"]
+    nff3d7d9e4c824480["IoT / VLAN 20"]
+    n84983c60f7daadc1["Guest / VLAN 30"]
+  end
+  c5eec0dc419aa8337["Laptop"]
+  n094a367b026246fb -.->|"reported membership"| c5eec0dc419aa8337
