@@ -1,3 +1,4 @@
+import time
 import copy
 import json
 from types import SimpleNamespace
@@ -188,7 +189,7 @@ async def test_disabled_and_expired_plans_do_not_write(tmp_path, catalog):
     with pytest.raises(ValueError, match="disabled"):
         await changes.apply(plan["plan_id"])
     client.config.allow_writes = True
-    changes.plans[plan["plan_id"]]["expires"] = 0
+    changes.plans[plan["plan_id"]]["expires"] = time.monotonic() - 1
     with pytest.raises(ValueError, match="expired"):
         await changes.apply(plan["plan_id"])
     assert "PUT" not in client.calls

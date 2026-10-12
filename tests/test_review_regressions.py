@@ -1,3 +1,4 @@
+import time
 import asyncio
 import copy
 import json
@@ -248,14 +249,14 @@ async def test_plan_status_and_outcome_retention(tmp_path):
     from unifi_network_mcp.changes import MutationOutcome
     client, changes, token = await prepared(tmp_path)
     assert changes.status(token)["status"] == "prepared"
-    changes.plans[token]["expires"] = 0
+    changes.plans[token]["expires"] = time.monotonic() - 1
     assert changes.status(token)["status"] == "expired"
     for index in range(257):
         changes.record(str(index), MutationOutcome("accepted"))
     assert len(changes.outcomes) == 256
     with pytest.raises(ValueError, match="Unknown"):
         changes.status("0")
-    changes.outcomes["256"].recorded_at = 0
+    changes.outcomes["256"].recorded_at = time.monotonic() - 3601
     with pytest.raises(ValueError, match="retention"):
         changes.status("256")
 
